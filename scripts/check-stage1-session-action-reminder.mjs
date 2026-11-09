@@ -1,0 +1,10 @@
+import fs from "node:fs"; import path from "node:path";
+const read=(f)=>fs.readFileSync(path.join(process.cwd(),f),"utf8"); const checks=[]; const add=(l,o)=>checks.push([l,!!o]);
+const reminder=read("src/components/SessionActionReminder.tsx"), routes=read("bimbelku-backend/routes/api.php"), controller=read("bimbelku-backend/app/Http/Controllers/Api/LearningSessionController.php"), test=read("bimbelku-backend/tests/Feature/StageOneSessionActionReminderTest.php");
+add("reminder has tutor ready", reminder.includes("teacher_mark_ready"));
+add("reminder has student presence", reminder.includes("student_confirm_presence"));
+add("reminder has student review", reminder.includes("student_review_session"));
+add("legacy PIN reminder removed", !reminder.includes("student_generate_pin") && !routes.includes("session-pin"));
+add("backend exposes V2 reminder", controller.includes("teacher_mark_ready") && controller.includes("student_confirm_presence"));
+add("regression test follows V2", test.includes("teacher_mark_ready") && test.includes("student_confirm_presence") && test.includes("student_review_session"));
+let failed=0; for(const [l,o] of checks){console.log(`${o?'PASS':'FAIL'}  ${l}`); if(!o) failed++;} if(failed) process.exit(1); console.log(`\n${checks.length}/${checks.length} Session Action Reminder V2 checks PASS`);

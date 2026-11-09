@@ -1,0 +1,15 @@
+import { readFileSync } from "node:fs";
+const read = (p) => readFileSync(new URL(`../${p}`, import.meta.url), "utf8");
+const checks=[]; const expect=(ok,msg)=>{checks.push([msg,!!ok]); if(!ok) throw new Error(`Kontrak sesi final gagal: ${msg}`)};
+const routes=read("bimbelku-backend/routes/api.php");
+const controller=read("bimbelku-backend/app/Http/Controllers/Api/LearningSessionController.php");
+const workflow=read("bimbelku-backend/app/Http/Controllers/Api/SessionWorkflowController.php");
+const hub=read("src/components/LearningSessionHub.tsx");
+for (const route of ["/bookings/{booking}/learning-session","/bookings/{booking}/messages","/student/bookings/{booking}/presence-confirm","/bookings/{booking}/ready","/bookings/{booking}/check-out","/bookings/{booking}/progress-reports"]) expect(routes.includes(route), `rute ${route} tersedia di dalam grup role yang sesuai`);
+expect(!routes.includes("session-pin") && !routes.includes("learning-plan"), "PIN dan Target approval V1 tidak lagi menjadi runtime route");
+expect(controller.includes("studentConfirmPresence") && controller.includes("teacherReady"), "mutual presence V2 aktif");
+expect(controller.includes("PackageSessionChapterLog"), "hasil belajar memakai log Bab native");
+expect(workflow.includes("applyPendingPackageProgress"), "progress Bab baru final setelah review sesi");
+expect(hub.includes("Saya Sudah Hadir") && hub.includes("Saya Siap Mengajar"), "UI sesi memakai interaksi V2 sederhana");
+expect(!hub.includes("Buat PIN") && !hub.includes("Tujuan belajar"), "ritual PIN/Target lama hilang dari UI sesi");
+console.log(`Kontrak sesi final lulus (${checks.length} pemeriksaan).`);

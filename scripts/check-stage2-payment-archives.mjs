@@ -1,0 +1,13 @@
+import { readFileSync, existsSync } from "node:fs";
+const read=(p)=>readFileSync(new URL(`../${p}`,import.meta.url),"utf8");
+const expect=(ok,msg)=>{if(!ok) throw new Error(`Tahap pembayaran/arsip gagal: ${msg}`)};
+const app=read("src/App.tsx"), routes=read("bimbelku-backend/routes/api.php");
+const payment=read("src/pages/pembayaran/PaymentPage.tsx"), history=read("src/pages/students/TransactionHistory.tsx");
+const order=read("bimbelku-backend/app/Http/Controllers/Api/OrderController.php");
+const matching=read("bimbelku-backend/app/Services/TeacherMatchingService.php");
+expect(payment.includes("orderKind") && history.includes("order_kind"), "payment tetap memakai order_kind eksplisit");
+expect(order.includes("'order_kind' => $orderKind"), "backend transaksi mengirim order_kind");
+expect(!app.includes("/student/requests/legacy") && !existsSync(new URL("../src/pages/students/LegacyRequests.tsx", import.meta.url)), "halaman BookingRequest legacy sudah dipensiunkan");
+expect(!routes.includes("BookingRequestController") && !routes.includes("learning-attachments"), "API BookingRequest user-facing dan attachment lama sudah dipensiunkan");
+expect(matching.includes("BookingRequest"), "BookingRequest tetap dipakai internal untuk matching tutor");
+console.log("Payment tetap aman dan arsip BookingRequest user-facing sudah retired.");

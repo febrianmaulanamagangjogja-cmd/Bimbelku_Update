@@ -1,0 +1,46 @@
+import { existsSync, readFileSync } from "node:fs";
+
+const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+const exists = (path) => existsSync(new URL(`../${path}`, import.meta.url));
+const expect = (condition, message) => {
+  if (!condition) throw new Error(`Kontrak Tahap 6C final gagal: ${message}`);
+};
+
+const app = read("src/App.tsx");
+const routes = read("bimbelku-backend/routes/api.php");
+const adminController = read("bimbelku-backend/app/Http/Controllers/Api/AdminController.php");
+const userModel = read("bimbelku-backend/app/Models/User.php");
+const authController = read("bimbelku-backend/app/Http/Controllers/Api/AuthController.php");
+const caseCenter = read("src/pages/admin/CaseCenter.tsx");
+const test = read("bimbelku-backend/tests/Feature/StageSixCFinalRegressionTest.php");
+const packageJson = JSON.parse(read("package.json"));
+
+expect(app.includes('<Route path="/admin/finance-security" element={<Navigate to="/admin/pembayaran" replace />} />'), "URL frontend lama dialihkan");
+expect(app.includes('<Route path="/admin/access-control" element={<Navigate to="/admin" replace />} />'), "URL pengelolaan admin lama dialihkan");
+expect(!app.includes('import("./pages/admin/FinanceSecurity")'), "halaman autentikator tidak dimuat");
+expect(!app.includes('import("./pages/admin/AdminAccessControl")'), "halaman admin tambahan tidak dimuat");
+expect(!exists("src/pages/admin/FinanceSecurity.tsx"), "file autentikator lama sudah dihapus");
+expect(!exists("src/pages/admin/AdminAccessControl.tsx"), "file pengelolaan admin lama sudah dihapus");
+expect(!routes.includes("finance-security"), "API autentikator dihapus");
+expect(!routes.includes("finance.2fa"), "middleware autentikator tidak dipakai");
+expect(!routes.includes("payout-approvals"), "alur admin kedua tidak dipakai");
+expect(!adminController.includes("harus disetujui admin kedua"), "pencairan tidak meminta admin kedua");
+expect(adminController.includes("lockForUpdate()") && adminController.includes("proof_file"), "pencairan tetap memakai lock dan bukti");
+expect(userModel.includes("return $this->isPrimaryAdmin();"), "kompatibilitas superadmin menunjuk admin utama");
+expect(authController.includes("'is_primary_admin' => $user->role === 'admin' && $user->isPrimaryAdmin()"), "login belum membedakan admin utama dan admin biasa");
+expect(caseCenter.includes("teacher_replacements: any[]") && !caseCenter.includes("teacher_appeals"), "pusat kasus memakai kategori final tanpa banding poin lama");
+
+for (const scenario of [
+  "test_single_admin_finance_has_no_authenticator_route",
+  "test_single_admin_has_all_modules_even_with_legacy_permission_data",
+  "test_admin_management_and_second_approval_routes_remain_disabled",
+  "test_second_active_admin_can_login_but_primary_remains_account_owner",
+  "test_only_primary_admin_can_manage_other_admin_accounts",
+  "test_admin_seeder_never_silently_disables_secondary_admins",
+  "test_student_teacher_and_admin_routes_remain_isolated",
+]) expect(test.includes(scenario), `tes regresi memuat ${scenario}`);
+
+expect(packageJson.scripts["check:stage6c-final"] === "node scripts/check-stage6c-final.mjs", "script final terdaftar");
+expect(packageJson.scripts.check.includes("check:stage6c-final"), "pemeriksaan utama menjalankan regresi final");
+
+console.log("Kontrak Tahap 6C final lulus (admin utama mengelola admin biasa, tanpa autentikator kedua, audit dan isolasi role tetap aktif).");

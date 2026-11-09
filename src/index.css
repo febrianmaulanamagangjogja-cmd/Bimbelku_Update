@@ -1,0 +1,607 @@
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2-variations");
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 100% 98%;
+    --foreground: 217 33% 17%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 217 33% 17%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 33% 17%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 30% 94%;
+    --secondary-foreground: 221 51% 16%;
+
+    --muted: 30 20% 92%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 174 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 73% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 20 6% 90%;
+    --input: 20 6% 90%;
+    --ring: 17 88% 40%;
+
+    --radius: 1rem;
+
+    --brand-orange: #F97316;
+    --brand-text: #1E293B;
+    /*
+     * Global interaction layers. Keep these ordered so a local z-index cannot
+     * accidentally place evidence behind the case that opened it.
+     * 10 dropdown, 20 modal, 30 detail, 40 viewer, 50 critical alert.
+     */
+    --layer-dropdown: 1000;
+    --layer-modal: 2000;
+    --layer-modal-content: 2001;
+    --layer-detail: 3000;
+    --layer-detail-content: 3001;
+    --layer-detail-popover: 3500;
+    --layer-preview: 4000;
+    --layer-alert: 5000;
+    --layer-alert-content: 5001;
+
+    /* Custom colors */
+    --coral: 25 95% 53%;
+    --coral-light: 27 100% 95%;
+    --coral-dark: 17 88% 40%;
+    --teal: 174 60% 45%;
+    --teal-light: 174 60% 92%;
+    /* Gradients */
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(30 30% 98%) 100%);
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(20 30% 15% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(20 30% 15% / 0.07), 0 2px 4px -2px hsl(20 30% 15% / 0.05);
+    --shadow-lg: 0 10px 15px -3px hsl(20 30% 15% / 0.08), 0 4px 6px -4px hsl(20 30% 15% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(20 30% 15% / 0.1), 0 8px 10px -6px hsl(20 30% 15% / 0.05);
+    --shadow-card: 0 4px 20px -2px hsl(16 85% 60% / 0.1);
+    --shadow-card-hover: 0 12px 30px -4px hsl(16 85% 60% / 0.15);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 20 20% 10%;
+    --foreground: 30 20% 95%;
+
+    --card: 20 20% 12%;
+    --card-foreground: 30 20% 95%;
+
+    --popover: 20 20% 12%;
+    --popover-foreground: 30 20% 95%;
+
+    --primary: 16 85% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 20 20% 18%;
+    --secondary-foreground: 30 20% 90%;
+
+    --muted: 20 20% 18%;
+    --muted-foreground: 30 15% 60%;
+
+    --accent: 174 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 20 20% 20%;
+    --input: 20 20% 20%;
+    --ring: 16 85% 60%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  :where(a, button, input, select, textarea, [role="button"]):focus-visible {
+    outline: 3px solid rgb(194 65 12 / 0.65);
+    outline-offset: 3px;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .package-builder-form :where(section, article, div, fieldset, label, legend) {
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .package-builder-form :where(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+    inline-size: 100%;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  .package-builder-form fieldset {
+    inline-size: 100%;
+  }
+
+  @media (max-width: 639px) {
+    .package-builder-form input[type="date"] {
+      display: block;
+      min-height: 3rem;
+      -webkit-min-logical-width: 0;
+    }
+  }
+
+  .skip-link {
+    @apply fixed left-3 top-3 z-[500] -translate-y-24 rounded-xl bg-slate-950 px-4 py-3 text-sm font-black text-white shadow-2xl transition-transform;
+  }
+
+  .skip-link:focus {
+    @apply translate-y-0;
+  }
+}
+
+/* Tablet/desktop density (±80% dari skala lama). Breakpoint ini sengaja
+ * dimulai setelah aturan mobile agar layout sentuh tidak berubah. */
+@media (min-width: 640px) {
+  html {
+    font-size: 80%;
+  }
+
+  html:has(.public-site) {
+    font-size: 100%;
+  }
+}
+
+@media (max-width: 639px) {
+  /* Guard rail mobile: konten dinamis (judul mapel, nama paket, kode, status,
+     dan teks API) tidak boleh memaksa halaman melebar di Android kecil. */
+  article,
+  form,
+  fieldset,
+  [role="dialog"] {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  article > *,
+  form > *,
+  fieldset > *,
+  [role="dialog"] > * {
+    min-width: 0;
+  }
+
+  article :where(h1, h2, h3, h4, p, span, a, button),
+  [role="dialog"] :where(h1, h2, h3, h4, p, span, a, button) {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  img,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  input,
+  select,
+  textarea {
+    max-width: 100%;
+    font-size: 16px !important;
+  }
+
+  [role="dialog"] {
+    max-height: calc(100dvh - 1rem);
+  }
+
+  [data-sonner-toaster] {
+    --width: calc(100vw - 1.5rem) !important;
+    left: 0.75rem !important;
+    right: 0.75rem !important;
+    width: auto !important;
+    max-width: calc(100vw - 1.5rem) !important;
+  }
+
+  [data-sonner-toaster][data-x-position="center"] {
+    transform: none !important;
+  }
+
+  [data-sonner-toast] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Sistem visual halaman aplikasi di layar kecil. Aturan ini sengaja hanya
+     hidup di area konten layout agar landing page dan tampilan desktop tidak
+     ikut berubah. */
+  .mobile-app-content {
+    overscroll-behavior-y: contain;
+  }
+
+  .mobile-app-content :where(table) {
+    min-width: 42rem;
+  }
+
+  .mobile-app-content :where(.overflow-x-auto) {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .mobile-app-content :where(button, a, input, select) {
+    min-width: 0;
+  }
+
+  .mobile-app-content [class~="space-y-7"] > :not([hidden]) ~ :not([hidden]),
+  .mobile-app-content [class~="space-y-8"] > :not([hidden]) ~ :not([hidden]),
+  .mobile-app-content [class~="space-y-10"] > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.25rem;
+  }
+
+  .mobile-app-content :where(section, article, div, [role="status"])[class*="rounded-[2rem]"],
+  .mobile-app-content :where(section, article, div, [role="status"])[class*="rounded-[2.5rem]"] {
+    border-radius: 1.375rem;
+  }
+
+  .mobile-app-content :where(section, article, div)[class~="p-8"],
+  .mobile-app-content :where(section, article, div)[class~="p-10"],
+  .mobile-app-content :where(section, article, div)[class~="p-12"] {
+    padding: 1.25rem;
+  }
+
+  .mobile-app-content :where(section, article, div)[class~="py-16"],
+  .mobile-app-content :where(section, article, div)[class~="py-20"] {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .mobile-app-content :where(h1, h2)[class~="text-3xl"],
+  .mobile-app-content :where(h1, h2)[class~="text-4xl"] {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Efek interaktif dipadatkan agar tidak menghasilkan utilitas transform dan
+     shadow Tailwind berulang pada stylesheet awal. */
+  @media (hover: hover) {
+    .hover-shadow-sm:hover { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+    .hover-shadow-md:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+    .hover-shadow-lg:hover { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+    .hover-shadow-xl:hover { box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+    .hover-shadow-card:hover { box-shadow: var(--shadow-card-hover); }
+    .hover-rise-half:hover { transform: translateY(-0.125rem); }
+    .hover-rise:hover { transform: translateY(-0.25rem); }
+    .hover-scale-102:hover { transform: scale(1.02); }
+    .hover-scale-110:hover { transform: scale(1.1); z-index: 20; }
+  }
+
+  @media (min-width: 640px) and (hover: hover) {
+  }
+}
+
+@layer components {
+  :where(input, select, textarea).form-field,
+  :where(input, select, textarea).form-textarea {
+    @apply w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-500 focus:ring-4 focus:ring-orange-100;
+  }
+
+  :where(input, select).form-field {
+    @apply min-h-11;
+  }
+
+  textarea.form-field,
+  textarea.form-textarea {
+    @apply min-h-24 resize-y;
+  }
+
+  input[type="file"].form-field {
+    @apply h-auto cursor-pointer py-2;
+  }
+
+  .form-input {
+    @apply h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:ring-4 focus:ring-orange-100;
+  }
+
+  .footer-public-link {
+    @apply inline-flex min-h-8 items-center text-slate-300 transition-colors hover:text-white;
+  }
+}
+
+@keyframes hero-match-card {
+  0%, 24% { transform: translateY(6px); opacity: .82; }
+  36%, 82% { transform: translateY(0); opacity: 1; }
+  94%, 100% { transform: translateY(6px); opacity: .82; }
+}
+
+@keyframes hero-mobile-note-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -5px, 0); }
+}
+
+@keyframes hero-mobile-write {
+  0%, 8% { opacity: .2; transform: scaleX(.12); }
+  28%, 76% { opacity: 1; transform: scaleX(1); }
+  94%, 100% { opacity: .2; transform: scaleX(.12); }
+}
+
+@keyframes hero-mobile-icon-tilt {
+  0%, 24%, 100% { transform: rotate(0deg); }
+  34% { transform: rotate(-12deg); }
+  42% { transform: rotate(6deg); }
+  50% { transform: rotate(0deg); }
+}
+
+.hero-mobile-scene[data-active="true"] .hero-mobile-note-one {
+  animation: hero-mobile-note-float 7s ease-in-out infinite;
+}
+
+.hero-mobile-scene[data-active="true"] .hero-mobile-note-two {
+  animation: hero-mobile-note-float 8s ease-in-out -3.5s infinite;
+}
+
+.hero-mobile-scene[data-active="true"] .hero-mobile-note svg {
+  animation: hero-mobile-icon-tilt 8s ease-in-out infinite;
+}
+
+.hero-mobile-scene[data-active="true"] .hero-mobile-writing-line {
+  animation: hero-mobile-write 7s ease-in-out infinite;
+}
+
+.hero-mobile-scene[data-active="true"] .hero-mobile-writing-line:nth-child(2) {
+  animation-delay: .65s;
+}
+
+.hero-mobile-scene[data-active="true"] .hero-mobile-writing-right .hero-mobile-writing-line {
+  animation-delay: -3.5s;
+  transform-origin: right center;
+}
+
+.hero-mobile-writing-line { transform-origin: left center; }
+
+html[data-site-animations="off"] .hero-mobile-note,
+html[data-site-animations="off"] .hero-mobile-note svg,
+html[data-site-animations="off"] .hero-mobile-writing-line {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mobile-note,
+  .hero-mobile-note svg,
+  .hero-mobile-writing-line { animation: none !important; }
+}
+
+@keyframes hero-match-dot {
+  0%, 28% { background: #F97316; box-shadow: 0 0 0 0 rgb(249 115 22 / .2); }
+  38%, 84% { background: #15803D; box-shadow: 0 0 0 5px rgb(21 128 61 / .12); }
+  96%, 100% { background: #F97316; box-shadow: 0 0 0 0 rgb(249 115 22 / 0); }
+}
+
+@keyframes hero-status-pending {
+  0%, 28% { opacity: 1; transform: translateY(0); }
+  38%, 88% { opacity: 0; transform: translateY(-3px); }
+  96%, 100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-status-found {
+  0%, 28% { opacity: 0; transform: translateY(3px); }
+  38%, 88% { opacity: 1; transform: translateY(0); }
+  96%, 100% { opacity: 0; transform: translateY(3px); }
+}
+
+.hero-orbit-scene[data-active="true"] .hero-match-card {
+  animation: hero-match-card 10.5s ease-in-out infinite;
+}
+
+.hero-orbit-scene[data-active="true"] .hero-match-dot {
+  animation: hero-match-dot 10.5s ease-in-out infinite;
+}
+
+.hero-orbit-scene[data-active="true"] .hero-status-pending {
+  animation: hero-status-pending 10.5s ease-in-out infinite;
+}
+
+.hero-orbit-scene[data-active="true"] .hero-status-found {
+  animation: hero-status-found 10.5s ease-in-out infinite;
+}
+
+html[data-site-animations="off"] .hero-match-card,
+html[data-site-animations="off"] .hero-match-dot {
+  animation: none !important;
+}
+
+
+html[data-site-animations="off"] .hero-status-pending {
+  display: none;
+}
+
+html[data-site-animations="off"] .hero-status-found {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-match-card,
+  .hero-match-dot {
+    animation: none !important;
+  }
+
+
+  .hero-status-pending {
+    display: none;
+  }
+
+  .hero-status-found {
+    opacity: 1;
+  }
+}
+
+@keyframes bimbelku-orbit-one {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes bimbelku-orbit-two {
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+@keyframes bimbelku-orbit-three {
+  from { transform: translate(-50%, -50%) rotate(24deg); }
+  to { transform: translate(-50%, -50%) rotate(384deg); }
+}
+
+@keyframes bimbelku-marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+.hero-orbit-scene[data-active="true"] .hero-orbit-one {
+  animation: bimbelku-orbit-one 28s linear infinite;
+}
+
+.hero-orbit-scene[data-active="true"] .hero-orbit-two {
+  animation: bimbelku-orbit-two 34s linear infinite;
+}
+
+.hero-orbit-scene[data-active="true"] .hero-orbit-three {
+  animation: bimbelku-orbit-three 40s linear infinite;
+}
+
+.landing-marquee[data-active="true"] .landing-marquee-track {
+  animation: bimbelku-marquee 28s linear infinite;
+}
+
+html[data-site-animations="off"] .hero-orbit,
+html[data-site-animations="off"] .landing-marquee-track,
+html[data-site-animations="off"] .tutor-ticker-track {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-orbit,
+  .landing-marquee-track,
+  .tutor-ticker-track {
+    animation: none !important;
+  }
+}
+
+
+.tutor-ticker[data-active="true"] .tutor-ticker-track {
+  animation: bimbelku-marquee 46s linear infinite;
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+  .tutor-ticker {
+    overflow-x: auto;
+  }
+
+
+}
+
+.testimonial-ticker[data-active="true"] .testimonial-ticker-track {
+  animation: bimbelku-marquee 52s linear infinite;
+}
+
+.testimonial-ticker:hover .testimonial-ticker-track,
+.testimonial-ticker:focus-within .testimonial-ticker-track {
+  animation-play-state: paused;
+}
+
+html[data-site-animations="off"] .testimonial-ticker-track {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-ticker {
+    overflow-x: auto;
+  }
+
+  .testimonial-ticker-track {
+    animation: none !important;
+  }
+}
+/* Lewati layout dan paint bagian panjang yang belum masuk viewport. */
+@supports (content-visibility: auto) {
+  .render-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 560px;
+  }
+
+  .render-auto-tall {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 920px;
+  }
+}
+
+html[data-site-animations="off"] .public-site *,
+html[data-site-animations="off"] .public-site *::before,
+html[data-site-animations="off"] .public-site *::after {
+  animation: none !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+}
